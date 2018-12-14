@@ -70,7 +70,9 @@ for e in range(epochs):
     else:
         print(f"training loss: {running_loss/len(trainloader)}")
 
-img = image[0].view(1,784)
+#testing of model
+test_img, test_lbl = next(iter(testset))
+img = test_img[0].view(1,784)
 with t.no_grad():
     logits = model.forward(img)
 
