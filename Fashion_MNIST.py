@@ -38,7 +38,7 @@ criterion = nn.NLLLoss()
 optimizer = optim.Adam(model.parameters(), lr= 0.003)
 
 #epochs
-epochs = 5
+epochs = 1
 
 for e in range(epochs):
     running_loss = 0
@@ -71,7 +71,9 @@ for e in range(epochs):
         print(f"training loss: {running_loss/len(trainloader)}")
 
 #testing of model
-test_img, test_lbl = next(iter(testset))
+#test_img, test_lbl = next(iter(testset))
+for test_img, test_lbl in trainloader:
+    test_img += test_img
 img = test_img[0].view(1,784)
 with t.no_grad():
     logits = model.forward(img)
@@ -79,3 +81,41 @@ with t.no_grad():
 ps = F.softmax(logits, dim = 1)
 
 helper.view_classify(img.view(1,28,28), ps, version = 'Fashion')
+
+
+#testing of model's accuracy
+for test_img2, test_lbl2 in trainloader:
+    test_img2 += test_img2
+#print(len(image))
+acc_test_img2 = test_img2.view(test_img2.shape[0], -1)
+with t.no_grad():
+    logits2 = model.forward(acc_test_img2)
+
+ps2 = F.softmax(logits2, dim = 1)
+print(ps2.shape)
+
+#testing of model's accuracy
+for test_img2, test_lbl2 in trainloader:
+    test_img2 += test_img2
+#print(len(image))
+acc_test_img2 = test_img2.view(test_img2.shape[0], -1)
+with t.no_grad():
+    logits2 = model.forward(acc_test_img2)
+
+ps2 = F.softmax(logits2, dim = 1)
+print(ps2.shape)
+
+
+#measuring accuracy
+top_p, top_class = ps2.topk(1, dim = 1)
+
+equals = top_class == test_lbl2.view(*top_class.shape)
+
+print('top class = ', top_class)
+print('test lebel = ', test_lbl2.view(top_class.shape))
+
+print('equal', equals)
+
+#accuracy
+accuracy = t.mean(equals.type(t.FloatTensor))
+print(f'accuracy: {accuracy.item()*100}%')
