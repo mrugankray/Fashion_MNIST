@@ -15,7 +15,7 @@ trainloader = t.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
 #test set
 testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data', download= True, train= False, transform=transform)
-trainloader = t.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+testloader = t.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
 
 #image, label = next(iter(trainloader))
 #helper.imshow(image[0,:])
@@ -82,20 +82,8 @@ ps = F.softmax(logits, dim = 1)
 
 helper.view_classify(img.view(1,28,28), ps, version = 'Fashion')
 
-
 #testing of model's accuracy
-for test_img2, test_lbl2 in trainloader:
-    test_img2 += test_img2
-#print(len(image))
-acc_test_img2 = test_img2.view(test_img2.shape[0], -1)
-with t.no_grad():
-    logits2 = model.forward(acc_test_img2)
-
-ps2 = F.softmax(logits2, dim = 1)
-print(ps2.shape)
-
-#testing of model's accuracy
-for test_img2, test_lbl2 in trainloader:
+for test_img2, test_lbl2 in testloader:
     test_img2 += test_img2
 #print(len(image))
 acc_test_img2 = test_img2.view(test_img2.shape[0], -1)
